@@ -28,6 +28,10 @@ def _spreadsheet_safe(value):
     "/",
     response_model=schemas.ProductOut,
     summary="Dar de alta un producto",
+    description=(
+        "Requiere sesión de administrador y el header `x-csrf-token`. "
+        "El ejemplo crea un producto con SKU, precio y stock."
+    ),
     response_description="SKU creado con stock y precio de lista",
     tags=["products"],
     responses=schemas.OPENAPI_ERROR_RESPONSES,

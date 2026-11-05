@@ -11,6 +11,8 @@ El dominio cubre tres agregados:
 | **Orden** | Cabecera (`orders`) + detalle (`order_items`) con cantidad y precio unitario ya descontado. |
 
 Público objetivo: equipos backend que consuman el servicio desde un storefront, un BFF o un canal interno. La aplicación incluye un storefront server-rendered con Jinja2, Tailwind CSS y Flowbite (`/`) además de la vista de historial (`/orders`). La especificación viva está en Swagger UI (`/docs`) y ReDoc (`/redoc`).
+El paso a paso para operar la API está en [`MANUAL_USUARIO.md`](MANUAL_USUARIO.md)
+y hay un ejemplo ejecutable en [`examples/flujo_api.sh`](examples/flujo_api.sh).
 
 ---
 
@@ -223,6 +225,11 @@ Los tests cubren paginación, historial anidado (`product_names`), descuento en 
 ---
 
 ## Contratos HTTP (resumen)
+
+Antes de ejecutar endpoints protegidos desde Swagger, inicia sesión con
+`POST /auth/login`, consulta `GET /auth/csrf` y copia el valor en el header
+`x-csrf-token`. La cookie de sesión se conserva en el navegador; Swagger
+muestra ejemplos de cuerpos para los endpoints de creación.
 
 | Método | Ruta | Tag | Éxito |
 | --- | --- | --- | --- |

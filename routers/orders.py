@@ -20,6 +20,11 @@ def _order_out(order: models.Order) -> models.Order:
     "/",
     response_model=schemas.OrderOut,
     summary="Procesar una orden de compra",
+    description=(
+        "Requiere sesión de comprador y `x-csrf-token`. El usuario autenticado "
+        "solo puede crear órdenes para sí mismo; para comprar sin cuenta usa "
+        "`POST /orders/guest`."
+    ),
     response_description="Orden confirmada con líneas, precios unitarios y total",
     tags=["orders"],
     responses={

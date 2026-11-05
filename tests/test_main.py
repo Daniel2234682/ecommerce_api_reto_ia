@@ -254,6 +254,32 @@ def test_create_product(client: TestClient):
     assert body["id"] > 0
 
 
+def test_openapi_documents_examples_and_write_flow(client: TestClient):
+    spec = client.get("/openapi.json").json()
+
+    product_schema = spec["components"]["schemas"]["ProductCreate"]
+    assert product_schema["example"]["sku"] == "TEC-MEC-001"
+    assert "x-csrf-token" in {
+        parameter["name"]
+        for parameter in spec["paths"]["/products/"]["post"]["parameters"]
+    }
+    assert "x-csrf-token" in spec["info"]["description"]
+
+    client.post(
+        "/auth/login",
+        json={"email": "admin@test.com", "password": "Admin-password-123"},
+    )
+    csrf = client.get("/auth/csrf").json()["csrf_token"]
+    created = client.post(
+        "/products/",
+        json=product_schema["example"],
+        headers={"X-CSRF-Token": csrf},
+    )
+
+    assert created.status_code == 200
+    assert created.json()["sku"] == "TEC-MEC-001"
+
+
 def test_admin_dashboard_renders_live_metrics(client: TestClient, seed_data):
     client.post("/auth/login", json={"email": "admin@test.com", "password": "Admin-password-123"})
     response = client.get("/admin")

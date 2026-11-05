@@ -41,7 +41,14 @@ app = FastAPI(
     description=(
         "API REST de comercio electrónico: usuarios, catálogo y órdenes. "
         "Documentación interactiva en `/docs` (Swagger UI) y `/redoc` (ReDoc). "
-        "El esquema OpenAPI está en `/openapi.json`."
+        "El esquema OpenAPI está en `/openapi.json`.\n\n"
+        "## Flujo para crear recursos desde Swagger UI\n"
+        "1. Ejecuta `POST /auth/login` con un usuario administrador.\n"
+        "2. Ejecuta `GET /auth/csrf` y copia `csrf_token`.\n"
+        "3. En cada operación de escritura, pulsa **Try it out**, pega el token "
+        "en el header `x-csrf-token` y envía el ejemplo del cuerpo.\n"
+        "La cookie de sesión se conserva automáticamente en este mismo navegador. "
+        "El catálogo público y `POST /orders/guest` no requieren autenticación."
     ),
     version="1.0.0",
     contact={"name": "Ecommerce API — Ingeniería de Software"},

@@ -31,15 +31,45 @@ class UserListOut(BaseModel):
 class RegisterIn(UserCreate):
     password: str = Field(min_length=8, max_length=128)
 
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "name": "Ana Pérez",
+                "email": "ana@example.com",
+                "password": "Ana-password-123",
+            }
+        }
+    )
+
 
 class LoginIn(BaseModel):
     email: str = Field(min_length=3, max_length=100)
     password: str = Field(min_length=1, max_length=128)
 
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "email": "admin@example.com",
+                "password": "Admin-password-123",
+            }
+        }
+    )
+
 
 class AdminUserCreate(UserCreate):
     password: str = Field(min_length=8, max_length=128)
     role: str = Field(default="buyer", pattern="^(admin|buyer)$")
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "name": "Carlos Gómez",
+                "email": "carlos@example.com",
+                "password": "Carlos-password-123",
+                "role": "buyer",
+            }
+        }
+    )
 
 
 class AdminUserUpdate(BaseModel):
@@ -83,6 +113,19 @@ class ProductCreate(BaseModel):
     price: float = Field(gt=0)
     stock: int = Field(ge=0)
     category_id: Optional[int] = Field(default=None, gt=0)
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "name": "Teclado mecánico",
+                "sku": "TEC-MEC-001",
+                "description": "Teclado compacto con conexión USB.",
+                "image_url": "https://example.com/teclado.jpg",
+                "price": 79.99,
+                "stock": 25,
+            }
+        }
+    )
 
 
 class ProductUpdate(BaseModel):
@@ -145,6 +188,10 @@ class CategoryCreate(BaseModel):
     name: str = Field(min_length=1, max_length=80)
     slug: str = Field(min_length=1, max_length=80)
 
+    model_config = ConfigDict(
+        json_schema_extra={"example": {"name": "Electrónica", "slug": "electronica"}}
+    )
+
 
 class CategoryUpdate(BaseModel):
     name: Optional[str] = Field(default=None, min_length=1, max_length=80)
@@ -170,14 +217,33 @@ class OrderItemIn(BaseModel):
     product_id: int
     quantity: int = Field(gt=0)
 
+    model_config = ConfigDict(
+        json_schema_extra={"example": {"product_id": 1, "quantity": 2}}
+    )
+
 
 class OrderCreate(BaseModel):
     user_id: int
     items: List[OrderItemIn] = Field(min_length=1)
 
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "user_id": 1,
+                "items": [{"product_id": 1, "quantity": 2}],
+            }
+        }
+    )
+
 
 class GuestOrderCreate(BaseModel):
     items: List[OrderItemIn] = Field(min_length=1)
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {"items": [{"product_id": 1, "quantity": 1}]}
+        }
+    )
 
 
 class OrderItemOut(BaseModel):
